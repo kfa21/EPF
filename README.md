@@ -35,6 +35,19 @@ Then open <http://127.0.0.1:8123/>. The server binds to loopback only, writes it
 | 09 Commercial | Rental term, availability regime, price basis points, clarifications |
 | 10 Sources | Document register, assumptions, and every deliberate estimate |
 
+## Deployment
+
+The site is a static site (no build step). It is published in two places:
+
+* **Freebuff Sites (production):** https://site-1f9bf1eb698f4d668fb374c1f5d0fbc4.freebuff.page — deployed from the
+  `public/` staging directory via `worker.js` + `manifest.json` (Worker serves `env.ASSETS`).
+* **GitHub Pages:** https://kfa21.github.io/EPF/ — served from the repository root on `main`.
+* **Repository:** https://github.com/kfa21/EPF
+
+To redeploy to Freebuff Sites: refresh `public/` (`cp index.html cost-model.html public/ && cp -r assets public/`),
+then `sites_deploy` with a new `requestId` and `sites_set_published` published=true. To update GitHub Pages:
+`git add -A && git commit && git push` — Pages rebuilds automatically.
+
 ## Cost model and rental pricing
 
 `cost-model.html` is a second page that prices the scope: 40 bottom-up capital lines, 13 operating
