@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Ad Daimah EPF — Cost model and rental pricing</title>
+<meta name="description" content="Bottom-up CAPEX and OPEX model for the 25,000 bopd Ad Daimah rental EPF, with a build-up of the monthly operating rate and module rates." />
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%230d1117'/%3E%3Cpath d='M7 22h6V10h6v12h6' stroke='%23f59e0b' stroke-width='2.5' fill='none'/%3E%3C/svg%3E" />
+<link rel="stylesheet" href="assets/css/styles.css" />
+<link rel="stylesheet" href="assets/css/cost.css" />
+</head>
+<body class="cm-body">
+
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="topbar">
+  <div class="wrap topbar-in">
+    <a class="brand" href="index.html">
+      <span class="brand-mark" aria-hidden="true">
+        <svg viewBox="0 0 28 28"><path d="M4 22h5V8h5v14h5" fill="none" stroke="currentColor" stroke-width="2.4"/><circle cx="23" cy="8" r="2.2" fill="currentColor"/></svg>
+      </span>
+      <span class="brand-txt"><strong>Ad Daimah EPF</strong><small>Cost model · rental pricing</small></span>
+    </a>
+    <nav class="nav" id="nav" aria-label="Page">
+      <a href="#headline">Summary</a>
+      <a href="#inputs">Inputs</a>
+      <a href="#capex">CAPEX</a>
+      <a href="#opex">OPEX</a>
+      <a href="#price">Pricing</a>
+      <a href="#ratecard">Rate card</a>
+      <a href="#sensitivity">Sensitivity</a>
+      <a href="#basis">Basis</a>
+    </nav>
+    <div class="topbar-actions">
+      <a class="btn btn-outline btn-sm" href="index.html">&larr; Technical study</a>
+      <button class="btn btn-primary btn-sm" id="cmDownload" type="button">Download CSV</button>
+      <button class="nav-toggle" id="navToggle" type="button" aria-label="Menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+
+  <!-- ============================================================ hero -->
+  <section class="cm-hero">
+    <div class="wrap">
+      <p class="cm-kicker">Cost model &amp; rental pricing · indicative Class 4 estimate</p>
+      <h1>What it costs to build, and what to charge for it</h1>
+      <p class="cm-lede">
+        A bottom-up model of the 25,000 bopd Ad Daimah rental EPF: 40 capital lines, 13 operating
+        lines, and a monthly operating rate built from capital recovery, operating cost, risk and
+        margin. Change any assumption and the tariff, the module rates and the investor return
+        recompute.
+      </p>
+      <div class="cm-hero-actions">
+        <a class="btn btn-primary" href="#inputs">Adjust the assumptions</a>
+        <a class="btn btn-outline" href="#ratecard">See the bid rate card</a>
+      </div>
+      <p class="cm-disclaimer">
+        <strong>Not a Company-approved cost estimate.</strong> Every number below is the Contractor’s
+        own Class 4 estimate (±25%) built from the RFQ documents and 2026 Gulf rental-market unit
+        rates. It is a pricing tool, not a quotation, and it excludes Company scope.
+      </p>
+    </div>
+  </section>
+
+  <!-- ========================================================= headline -->
+  <section class="sec" id="headline">
+    <div class="wrap">
+      <header class="sec-head">
+        <p class="kicker">01 — Headline</p>
+        <h2>The number to bid, and the floor under it</h2>
+        <p class="sec-lede">
+          The monthly rate is fully inclusive — equipment, people, consumables, maintenance and
+          support — because the Scope of Work deems everything required to run the facility to be
+          included. Price per barrel is derived, not charged: the rent is monthly.
+        </p>
+      </header>
+
+      <div class="cm-kpis" id="cmKpis"></div>
+
+      <div class="cm-price-card">
+        <div class="cm-price-head">
+          <h3>Where the monthly rate goes</h3>
+          <span class="cm-muted">Recommended bid, split by driver</span>
+        </div>
+        <div class="cm-bar" id="priceBar" role="img" aria-label="Split of the monthly rate between capital recovery, operating cost, risk allowance and margin"></div>
+        <div class="cm-legend" id="priceLegend"></div>
+        <p class="cm-price-note">
+          Capital recovery is the largest block because the firm term is short relative to the asset
+          life: a 36-month term has to return the whole capital bucket. Lengthening the term is the
+          single most effective way to cut the tariff — see the sensitivity section.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================================================== inputs -->
+  <section class="sec sec-alt" id="inputs">
+    <div class="wrap">
+      <header class="sec-head">
+        <p class="kicker">02 — Assumptions</p>
+        <h2>Every driver, open to challenge</h2>
+        <p class="sec-lede">
+          These are the inputs the whole model runs on. The defaults are the Contractor’s base case;
+          drag a slider or type a number and everything below recalculates immediately.
+        </p>
+      </header>
+
+      <div class="cm-actions">
+        <button class="btn btn-ghost btn-sm" type="button" id="cmReset">Reset to base case</button>
+        <button class="btn btn-ghost btn-sm" type="button" id="cmPrint">Print / PDF</button>
+      </div>
+
+      <div id="cmInputs" class="cm-inputs-wrap"></div>
+    </div>
+  </section>
+
+  <!-- ============================================================ capex -->
+  <section class="sec" id="capex">
+    <div class="wrap">
+      <header class="sec-head">
+        <p class="kicker">03 — Capital cost</p>
+        <h2>CAPEX: 40 lines, two buckets</h2>
+        <p class="sec-lede">
+          Capital is split the way the Scope of Work asks it to be priced. The permanent facilities
+          are recovered inside the monthly operating rate; mobilisation, installation, commissioning
+          and demobilisation are one-off lines in the rate table, because the Company buys them once.
+        </p>
+      </header>
+
+      <div class="tbl-wrap">
+        <table class="tbl cm-tbl">
+          <caption>Table C1 — Installed cost estimate, USD 2026</caption>
+          <thead>
+            <tr><th style="width:56px">ID</th><th>Item and basis</th><th class="num" style="width:96px">Qty</th><th class="num cm-hide-sm" style="width:118px">Unit rate</th><th class="num" style="width:132px">Amount</th></tr>
+          </thead>
+          <tbody id="capexBody"></tbody>
+          <tfoot id="capexFoot"></tfoot>
+        </table>
+      </div>
+      <p class="cm-fine" id="capexNote"></p>
+    </div>
+  </section>
+
+  <!-- ============================================================= opex -->
+  <section class="sec sec-alt" id="opex">
+    <div class="wrap">
+      <header class="sec-head">
+        <p class="kicker">04 — Operating cost</p>
+        <h2>OPEX: what 95% availability actually costs</h2>
+        <p class="sec-lede">
+          The availability guarantee is bought with people, spares and maintenance. Rotational
+          staffing in southern Iraq, three separate operator teams, a laboratory per train and a
+          full spares holding are all in here — and all of it is at the Contractor’s expense.
+        </p>
+      </header>
+
+      <div class="tbl-wrap">
+        <table class="tbl cm-tbl">
+          <caption>Table C2 — Monthly operating cost at the assumed throughput</caption>
+          <thead>
+            <tr><th style="width:56px">ID</th><th>Item and basis</th><th class="num" style="width:124px">USD/month</th><th class="num cm-hide-sm" style="width:126px">USD/year</th><th class="num" style="width:96px">USD/bbl</th></tr>
+          </thead>
+          <tbody id="opexBody"></tbody>
+          <tfoot id="opexFoot"></tfoot>
+        </table>
+      </div>
+
+      <div class="cm-split">
+        <div class="cm-split-card">
+          <h4>What dominates</h4>
+          <p>People are the largest single line — roughly two fifths of OPEX. That is a fixed cost: it
+            does not fall when throughput falls, which is why the cost per barrel rises sharply at low
+            utilisation and why the 20% turndown case matters commercially.</p>
+        </div>
+        <div class="cm-split-card">
+          <h4>What the Company supplies</h4>
+          <p>Produced gas for power generation (Basis of Design: Phase 1 gas is consumed to generate
+            electricity), civil works and foundations, flowlines, wellsite facilities and the export
+            pipeline system. Diesel is modelled only as backup.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================ price -->
+  <section class="sec" id="price">
+    <div class="wrap">
+      <header class="sec-head">
+        <p class="kicker">05 — Price build-up and return</p>
+        <h2>Cost, risk and margin converted into a rate</h2>
+        <p class="sec-lede">
+          The capital bucket is annuitised over the firm term at the weighted average cost of capital,
+          operating cost is added at its modelled level, a risk allowance covers availability
+          penalties and feed variability, and the target margin is applied to the price.
+        </p>
+      </header>
+
+      <div class="grid-2 grid-wide-left">
+        <div class="cm-chart-card">
+          <div class="cm-chart-head">
+            <h3>Net cash flow after tax</h3>
+            <span class="cm-muted">USD millions per 12-month block</span>
+          </div>
+          <svg id="cashChart" viewBox="0 0 760 300" role="img" aria-label="Annual net cash flow chart"></svg>
+          <div class="cm-stats" id="cashStats"></div>
+        </div>
+
+        <div class="cm-facts" id="priceNotes"></div>
+      </div>
+
+      <div class="callout callout-warn cm-callout">
+        <p class="callout-h">Why the IRR sits above the cost of capital</p>
+        <p>
+          The capital charge already returns the weighted average cost of capital — the annuity fully
+          repays the capital bucket and pays 11% on it. The risk allowance and the target margin are
+          the Contractor’s reward on top, so the IRR lands well above WACC. That gap is the room you
+          have to sharpen the price without going below cost.
+        </p>
+        <p>
+          Read the two numbers together: the required monthly rate is the floor that recovers capital
+          and OPEX with nothing for the Contractor; the recommended bid is the floor plus risk and
+          margin. Anything you bid between them is commercially defensible, and the sensitivity table
+          shows what each concession costs you in return.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================================= rate card -->
+  <section class="sec sec-dark" id="ratecard">
+    <div class="wrap">
+      <header class="sec-head">
+        <p class="kicker">06 — Bid rate card</p>
+        <h2>The table the Company asks for</h2>
+        <p class="sec-lede">
+          Scope of Work §19 requires a rate per module, mobilisation and demobilisation per module,
+          and options priced separately. This is that table, filled from the model.
+        </p>
+      </header>
+
+      <div class="tbl-wrap cm-tbl-dark">
+        <table class="tbl cm-tbl">
+          <caption>Table C3 — Commercial rate table (§19 format)</caption>
+          <thead>
+            <tr><th>System / item</th><th class="num" style="width:150px">Monthly rate</th><th class="num" style="width:150px">Mobilisation</th><th class="num" style="width:110px">USD/bbl</th></tr>
+          </thead>
+          <tbody id="rateCardBody"></tbody>
+          <tfoot id="rateCardFoot"></tfoot>
+        </table>
+      </div>
+
+      <div class="cm-rc-notes">
+        <p><strong>Module split.</strong> Half the weight is the train’s own capital cost and half is
+          capacity share, so Yamama carries more than its 5,000 bopd would suggest — sour service,
+          CRA metallurgy, an H₂S stripper and nitrogen inerting make a small train expensive.</p>
+        <p><strong>What is not in these rates.</strong> Oil export Option A/B and the gas processing,
+          sweetening and sulphur scope are priced only when the Company defines their scope (§19
+          optional costs). Additional items are quoted on request.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======================================================== sensitivity -->
+  <section class="sec" id="sensitivity">
+    <div class="wrap">
+      <header class="sec-head">
+        <p class="kicker">07 — Sensitivity</p>
+        <h2>What moves the tariff, and by how much</h2>
+        <p class="sec-lede">
+          Ten scenarios against the base case. The required monthly rate is the cost-plus floor
+          before rounding; the percentage column is the change in the barrel tariff. Where a scenario
+          breaches the availability guarantee, the rate is grossed up by the 3%-per-point penalty so
+          that it still nets the same cost.
+        </p>
+      </header>
+
+      <div class="tbl-wrap">
+        <table class="tbl cm-tbl">
+          <caption>Table C4 — Sensitivity of the required rate</caption>
+          <thead>
+            <tr><th>Scenario</th><th class="num" style="width:130px">TIC</th><th class="num" style="width:150px">Required / month</th><th class="num" style="width:110px">USD/bbl</th><th class="num" style="width:100px">Change</th></tr>
+          </thead>
+          <tbody id="sensBody"></tbody>
+        </table>
+      </div>
+
+      <div class="cm-split">
+        <div class="cm-split-card">
+          <h4>Term beats price</h4>
+          <p>A 36-month term amortises the entire capital bucket over three years. Extending to 48 or
+            60 months is worth more to the tariff than a 15% procurement saving, and costs the Company
+            nothing if the facilities would be rented anyway.</p>
+        </div>
+        <div class="cm-split-card">
+          <h4>Availability is a revenue line</h4>
+          <p>Two points below the guarantee costs 6% of the monthly rate. At this scale that is more
+            than the entire maintenance budget difference between a good and a poor maintenance
+            strategy — which is why the availability case is modelled explicitly, not assumed away.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================= basis -->
+  <section class="sec sec-alt" id="basis">
+    <div class="wrap">
+      <header class="sec-head">
+        <p class="kicker">08 — Basis of estimate</p>
+        <h2>What is modelled, what is excluded, what is assumed</h2>
+        <p class="sec-lede">
+          A cost estimate is only as good as its exclusions. These are stated so the model can be
+          audited line by line rather than taken on trust.
+        </p>
+      </header>
+
+      <div class="grid-2 grid-wide-left">
+        <div class="tbl-wrap">
+          <table class="tbl tbl-compact">
+            <caption>Table C5 — Live assumptions behind this run</caption>
+            <thead><tr><th style="width:170px">Group</th><th>Parameter</th><th class="num" style="width:120px">Value</th></tr></thead>
+            <tbody id="assumpBody"></tbody>
+          </table>
+        </div>
+
+        <div class="cm-basis-list">
+          <h3 class="h3-rule">Scope included</h3>
+          <ul class="tick">
+            <li>All equipment, skids, modules, containers and bulk materials for three trains</li>
+            <li>Power generation, distribution, UPS and the emergency generator</li>
+            <li>ICSS, ESD, F&amp;G, SCADA, telecoms and cyber hardening</li>
+            <li>Control room, workshop, laboratory, camp and warehousing</li>
+            <li>Transport, installation, hook-up, commissioning and demobilisation</li>
+            <li>Operations, maintenance, consumables, spares and insurance for the term</li>
+          </ul>
+
+          <h3 class="h3-rule">Company scope, excluded</h3>
+          <ul class="xmark">
+            <li>Wells, wellheads, WHCP and multiphase flow meters</li>
+            <li>Flowlines, inlet manifolds and wellpad facilities</li>
+            <li>Civil works, foundations, roads, evaporation pond</li>
+            <li>10-inch trunkline, CPF tie-in, 16-inch export line, Halfaya connection</li>
+            <li>Permanent power, produced water disposal well, gas export</li>
+          </ul>
+
+          <h3 class="h3-rule">Estimate quality</h3>
+          <p class="cm-fine">
+            Class 4 (AACE) — prepared from concept flowsheets and equipment counts, not from
+            quotations. Accuracy −15% / +25%. All figures are real 2026 US dollars, no escalation;
+            add the Company’s escalation basis if the bid is indexed. Tax is modelled at the input
+            rate on revenue less OPEX less straight-line depreciation; financing structure, withholding
+            tax and currency exposure are not modelled.
+          </p>
+        </div>
+      </div>
+
+      <div class="cm-sources">
+        <p><strong>Derived from:</strong> Scope of Work ADA-2604-ENG-SOS-EPFA-GEN-001 Rev.0 (§4 capacities and availability, §19 commercial rate tables), Surface Facilities Basis of Design (18-08-2025), EPF Execution Strategy (18-08-2025), EPF Concept ADA-2501-PRO-RE-0000-PCN-003 Rev.K, Annexure 2 Rev.C. Unit rates are the Contractor’s own 2026 Gulf rental-market estimates.</p>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="cm-foot">
+  <div class="wrap cm-foot-in">
+    <p>Ad Daimah rental EPF · cost model and rental pricing · indicative Class 4 estimate</p>
+    <p><a href="index.html">Back to the technical study</a></p>
+  </div>
+</footer>
+
+<script src="assets/js/cost.js"></script>
+</body>
+</html>

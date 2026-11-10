@@ -1,0 +1,11 @@
+# Freebuff Desktop project marker (do not commit)
+.freebuff/
+
+# Runtime artifacts
+.serve.pid
+.serve.log
+
+# OS / editor
+.DS_Store
+Thumbs.db
+*.log
